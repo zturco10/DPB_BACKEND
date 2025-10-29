@@ -1,0 +1,1197 @@
+{
+	"info": {
+		"_postman_id": "13650688-c738-4b99-94bb-fb568f48354d",
+		"name": "UTEC Food Hub API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47752314"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "LoginUsuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if the token exists in the response\r",
+									"// (Adjust jsonData to jsonData.token if your API returns {\"token\": \"...\"})\r",
+									"if (jsonData) {\r",
+									"    // Store the token in the collection variable 'authToken'\r",
+									"    pm.collectionVariables.set(\"authToken\", jsonData);\r",
+									"    console.log(\"Auth Token set from login response.\");\r",
+									"} else {\r",
+									"    console.log(\"Token not found in login response.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"correo\": \"estudiante@ejemplo.com\",\r\n  \"contrasena\": \"contraseñaSegura123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Inicia sesión con correo y contraseña. Guarda el token JWT resultante en la variable `authToken` usando el script de \"Tests\"."
+					},
+					"response": []
+				},
+				{
+					"name": "RegisterUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Estudiante Prueba\",\r\n  \"correo\": \"estudiante@ejemplo.com\",\r\n  \"contrasena\": \"contraseñaSegura123\",\r\n  \"rol\": \"CLIENTE\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registra un nuevo usuario. Devuelve un token JWT si es exitoso."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "GetUsuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Lista todos los usuarios (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "GetUsuariosByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene un usuario por ID (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "GetCorreo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/correo/:correo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								"correo",
+								":correo"
+							],
+							"variable": [
+								{
+									"key": "correo",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene un usuario por correo (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Kioskero Ejemplo\",\r\n  \"correo\": \"kioskero@ejemplo.com\",\r\n  \"contrasena\": \"otraContraseña456\",\r\n  \"rol\": \"KIOSKERO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Crea un nuevo usuario (Solo ADMIN). Usar `/auth/register` para el registro público."
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Kioskero Ejemplo (Actualizado)\",\r\n  \"correo\": \"kioskero_nuevo@ejemplo.com\",\r\n  \"contrasena\": \"nuevaContraseña789\", \r\n  \"rol\": \"KIOSKERO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza un usuario por ID (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina un usuario por ID (Solo ADMIN)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "GetProductos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/productos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos"
+							]
+						},
+						"description": "Lista todos los productos disponibles."
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductoById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/productos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene un producto por su ID."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateProducto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Empanada de Pollo Casera\",\r\n  \"precio\": 7.50,\r\n  \"descripcion\": \"Hecha por estudiante X, ideal para la media mañana.\",\r\n  \"categoriaIds\": [2, 5], \r\n  \"menuId\": null \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/productos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos"
+							]
+						},
+						"description": "Crea un nuevo producto. Si lo crea un CLIENTE, el `vendedorId` se asigna automáticamente. Si lo crea un ADMIN, puede especificar `vendedorId`.\n\n_**Nota:**_ `_vendedorId_` _se asigna automáticamente si lo crea un CLIENTE. Si lo crea un ADMIN, puede añadir_ `_\"vendedorId\": 10_` _por ejemplo._ `_kioskoIds_` _no se gestiona desde aquí._"
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductoByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/productos/nombre/:nombre",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos",
+								"nombre",
+								":nombre"
+							],
+							"variable": [
+								{
+									"key": "nombre",
+									"value": ""
+								}
+							]
+						},
+						"description": "Busca un producto por su nombre exacto."
+					},
+					"response": []
+				},
+				{
+					"name": "BuscarProducto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/productos/buscar?nombre&precioMax",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos",
+								"buscar"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": null
+								},
+								{
+									"key": "precioMax",
+									"value": null
+								}
+							]
+						},
+						"description": "Busca productos filtrando por nombre y/o precio máximo. Ej: `/buscar?nombre=pollo&precioMax=15.50`"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateProducto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Empanada de Pollo Casera (OFERTA)\",\r\n  \"precio\": 6.00,\r\n  \"descripcion\": \"¡Ahora en oferta! Hecha por estudiante X.\",\r\n  \"categoriaIds\": [2] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/productos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza un producto. CLIENTE solo puede actualizar los suyos. KIOSKERO y ADMIN pueden actualizar (lógica de kiosko pendiente).\n\n_(__**Nota:**_ _Solo envía los campos que quieres modificar. Aquí quitamos la categoría 5 y cambiamos precio/nombre/descripción)_."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProducto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/productos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"productos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina un producto. CLIENTE solo puede eliminar los suyos."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kioskos",
+			"item": [
+				{
+					"name": "GetKioskos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/kioskos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos"
+							]
+						},
+						"description": "Obtiene la lista de todos los kioskos."
+					},
+					"response": []
+				},
+				{
+					"name": "GetKioskoById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/kioskos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene un kiosko específico por ID."
+					},
+					"response": []
+				},
+				{
+					"name": "GetKioskoByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/kioskos/nombre/:nombre",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos",
+								"nombre",
+								":nombre"
+							],
+							"variable": [
+								{
+									"key": "nombre",
+									"value": ""
+								}
+							]
+						},
+						"description": "Busca un kiosko por nombre exacto."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateKiosko",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Cafetería Central\",\r\n  \"ubicacion\": \"Primer Piso, Edificio A\",\r\n  \"horario\": \"L-V 8:00am - 6:00pm\",\r\n  \"descripcion\": \"Cafés, sandwiches y postres.\",\r\n  \"productoIds\": [1, 3, 7] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/kioskos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos"
+							]
+						},
+						"description": "Crea un nuevo kiosko (Solo ADMIN).\n\n(**Nota:** `productoIds` es una lista de IDs de Productos _existentes_ que vende este kiosko)"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateKiosko",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"horario\": \"L-V 8:00am - 7:00pm (Extendido!)\",\r\n  \"descripcion\": \"Ahora con más variedad de postres.\",\r\n  \"productoIds\": [1, 3, 7, 8] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/kioskos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza un kiosko (ADMIN o KIOSKERO - lógica de pertenencia pendiente).\n\n_(__**Nota:**_ _Aquí actualizamos horario, descripción y añadimos el producto con ID 8)_."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteKiosko",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/kioskos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"kioskos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina un kiosko (Solo ADMIN)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Menus",
+			"item": [
+				{
+					"name": "GetMenus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/menus",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus"
+							]
+						},
+						"description": "Obtiene la lista de todos los menús."
+					},
+					"response": []
+				},
+				{
+					"name": "GetMenuById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/menus/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene un menú específico por ID."
+					},
+					"response": []
+				},
+				{
+					"name": "GetDailyMenu",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/menus/dia/:dia",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus",
+								"dia",
+								":dia"
+							],
+							"variable": [
+								{
+									"key": "dia",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene el menú de un día específico (usar LUNES, MARTES, etc.)."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateMenu",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tipo\": \"ESTUDIANTIL\", \r\n  \"dia\": \"MARTES\",\r\n  \"precio\": 12.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/menus",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus"
+							]
+						},
+						"description": "Crea un nuevo menú (Solo ADMIN).\n\n(**Nota:** `productoIds` no se gestiona aquí. Los valores posibles para `tipo` son \"ECONOMICO\", \"ESTUDIANTIL\", \"EJECUTIVO\", \"SALUDABLE\" según `TipoMenu.java`)"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateMenu",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tipo\": \"SALUDABLE\", \r\n  \"precio\": 14.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/menus/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza un menú (Solo ADMIN).\n\n_(__**Nota:**_ _Solo actualizamos tipo y precio)_."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteMenu",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/menus/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"menus",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina un menú (Solo ADMIN)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categorias",
+			"item": [
+				{
+					"name": "GetCategorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categorias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categorias"
+							]
+						},
+						"description": "Obtiene la lista de todas las categorías."
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoriaById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categorias/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categorias",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene una categoría específica por ID."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCategoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Bebidas Calientes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categorias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categorias"
+							]
+						},
+						"description": "Crea una nueva categoría (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategoria",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Bebidas Muy Calientes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categorias/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categorias",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza una categoría (Solo ADMIN)."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCategoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categorias/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categorias",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina una categoría (Solo ADMIN)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resenas",
+			"item": [
+				{
+					"name": "GetResenas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas"
+							]
+						},
+						"description": "Obtiene todas las reseñas."
+					},
+					"response": []
+				},
+				{
+					"name": "GetResenaById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene una reseña específica por ID."
+					},
+					"response": []
+				},
+				{
+					"name": "GetResenaByProducto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas/producto/:productoId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"producto",
+								":productoId"
+							],
+							"variable": [
+								{
+									"key": "productoId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene todas las reseñas para un producto dado."
+					},
+					"response": []
+				},
+				{
+					"name": "GetResenaByUsuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas/usuario/:usuarioId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"usuario",
+								":usuarioId"
+							],
+							"variable": [
+								{
+									"key": "usuarioId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene todas las reseñas escritas por un usuario."
+					},
+					"response": []
+				},
+				{
+					"name": "ShowCalificacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas/calificacion/:valor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"calificacion",
+								":valor"
+							],
+							"variable": [
+								{
+									"key": "valor",
+									"value": ""
+								}
+							]
+						},
+						"description": "Obtiene reseñas filtradas por calificación (ej., /calificacion/5)."
+					},
+					"response": []
+				},
+				{
+					"name": "CreateResena",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"calificacion\": 5, \r\n  \"comentario\": \"¡La empanada estaba deliciosa! Muy recomendada.\",\r\n  \"productoId\": 4 \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas"
+							]
+						},
+						"description": "Crea una nueva reseña (Solo CLIENTE).\n\n_(__**Nota:**_ `_usuarioId_` _se asigna automáticamente con el usuario autenticado)_."
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateResena",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"calificacion\": 4,\r\n  \"comentario\": \"Estaba rica, pero un poco fría.\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Actualiza una reseña propia (Solo CLIENTE dueño).\n\n_(__**Nota:**_ _Solo se pueden actualizar_ `_calificacion_` _y_ `_comentario_`_)_."
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteResena",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/resenas/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Elimina una reseña (CLIENTE dueño o ADMIN)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UploadImage",
+			"item": [
+				{
+					"name": "UploadProductoImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Pon aqui la  Imagen del producto",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/uploads/productos/:id/imagen",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"uploads",
+								"productos",
+								":id",
+								"imagen"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Sube una imagen para un producto específico usando su ID. Requiere autenticación (CLIENTE o ADMIN). El cuerpo de la solicitud debe ser form-data con una clave 'file' que contenga la imagen."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		}
+	]
+}
